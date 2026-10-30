@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { LocalClips } from "@/components/local-clips";
+import { StudioDock } from "@/components/studio-dock";
 import { TeachingFiles } from "@/components/teaching-files";
 import { YoutubeSlot } from "@/components/youtube-slot";
 import { Shell } from "@/components/shell";
@@ -133,6 +134,8 @@ function WatchPage() {
         </a>
         . The lecture stays the creator’s, not HJ Med’s.
       </p>
+
+      <StudioDock title={lecture.title} />
 
       <div className="mt-4 flex flex-wrap gap-2">
         <button
