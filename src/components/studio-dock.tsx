@@ -52,9 +52,9 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
           </button>
         ))}
       </div>
-      <div className="grid items-start gap-3 lg:grid-cols-2">
+      <div className="grid items-start gap-3">
         <div className="min-w-0">{children}</div>
-        <section className="min-h-[46vh] overflow-hidden rounded-lg border border-line bg-ink">
+        <section className="overflow-hidden rounded-lg border border-line bg-ink">
           <div className="min-h-11 bg-teal px-4 py-3 text-sm font-semibold text-ink">
             {chosen ? chosen.label : "Widgets"}
           </div>
@@ -63,7 +63,7 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
               title={chosen.label}
               src={`${HOST}?view=${chosen.id}&embed=1&q=${encodeURIComponent(title)}`}
               className="w-full border-0 bg-ink"
-              style={tall ? { height: "920px", minHeight: "920px" } : { height: "46vh", minHeight: "320px" }}
+              style={{ height: "calc(100vh - 150px)", minHeight: "640px" }}
               allow="autoplay"
             />
           ) : (
