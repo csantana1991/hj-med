@@ -40,7 +40,12 @@ function WatchPage() {
       } else if (event.data && typeof event.data === "object") {
         payload = event.data as { info?: { currentTime?: number } };
       }
-      const time = payload?.info?.currentTime;
+      const info = payload && (payload.info || (payload as { info?: { currentTime?: number } }).info);
+      const time =
+        (info && typeof info.currentTime === "number" && info.currentTime) ||
+        (typeof (payload as { currentTime?: number }).currentTime === "number"
+          ? (payload as { currentTime?: number }).currentTime
+          : undefined);
       if (typeof time !== "number") return;
       window.parent.postMessage({ source: "hj-caption", cc: true, videoId, t: time }, "*");
     };
@@ -51,7 +56,7 @@ function WatchPage() {
       if (!win) return;
       win.postMessage(JSON.stringify({ event: "listening", id: "hj-yt", channel: "widget" }), "*");
       win.postMessage(JSON.stringify({ event: "command", func: "getCurrentTime", args: [], id: "hj-yt", channel: "widget" }), "*");
-    }, 1000);
+    }, 700);
     return () => {
       window.removeEventListener("message", onYt);
       window.clearInterval(poll);
