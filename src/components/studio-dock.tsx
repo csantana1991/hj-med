@@ -14,53 +14,50 @@ const HOST = "https://teaching-studios.vercel.app/studio/NucMed-Board-Studio.htm
 
 export function StudioDock({ title, children }: { title: string; children?: ReactNode }) {
   const [open, setOpen] = useState<string | null>(null);
-
-  function choose(id: string) {
-    setOpen((current) => (current === id ? null : id));
-    const panel = document.getElementById("panel-" + id);
-    if (panel) panel.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  }
+  const chosen = WIDGETS.find((widget) => widget.id === open);
+  const rest = WIDGETS.filter((widget) => widget.id !== open);
 
   return (
-    <div className="grid items-start gap-4 lg:grid-cols-[200px_minmax(0,1fr)]">
-      <nav className="flex flex-col gap-2">
+    <div className="min-w-0">
+      <div className="mb-3 flex flex-wrap gap-2">
         {WIDGETS.map((widget) => (
           <button
             key={widget.id}
             type="button"
-            onClick={() => choose(widget.id)}
+            onClick={() => setOpen((current) => (current === widget.id ? null : widget.id))}
             className={
               open === widget.id
-                ? "min-h-11 rounded-full bg-teal px-4 text-left text-sm font-semibold text-ink"
-                : "min-h-11 rounded-full border border-line px-4 text-left text-sm text-cream"
+                ? "min-h-11 rounded-full bg-teal px-4 text-sm font-semibold text-ink"
+                : "min-h-11 rounded-full border border-line px-4 text-sm text-cream"
             }
           >
             {widget.label}
           </button>
         ))}
-      </nav>
-      <div className="min-w-0">
-        {children}
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          {WIDGETS.map((widget) => {
-            const on = open === widget.id;
-            const src = `${HOST}?view=${widget.id}&embed=1&q=${encodeURIComponent(title)}`;
-            return (
-              <section id={"panel-" + widget.id} key={widget.id} className="min-w-0 overflow-hidden rounded-lg border border-line bg-ink">
-                <button
-                  type="button"
-                  onClick={() => choose(widget.id)}
-                  className={on ? "min-h-11 w-full bg-teal px-4 text-sm font-semibold text-ink" : "min-h-11 w-full bg-teal/80 px-4 text-sm font-semibold text-ink"}
-                >
-                  {widget.label}
-                </button>
-                {on ? (
-                  <iframe title={widget.label} src={src} className="h-[420px] w-full border-0 bg-ink" allow="autoplay" />
-                ) : null}
-              </section>
-            );
-          })}
-        </div>
+      </div>
+      {children}
+      {chosen ? (
+        <section className="mt-3 w-full overflow-hidden rounded-lg border border-line bg-ink">
+          <div className="min-h-11 bg-teal px-4 py-3 text-sm font-semibold text-ink">{chosen.label}</div>
+          <iframe
+            title={chosen.label}
+            src={`${HOST}?view=${chosen.id}&embed=1&q=${encodeURIComponent(title)}`}
+            className="h-[70vh] w-full border-0 bg-ink"
+            allow="autoplay"
+          />
+        </section>
+      ) : null}
+      <div className="mt-3 grid gap-3 md:grid-cols-2">
+        {rest.map((widget) => (
+          <button
+            key={widget.id}
+            type="button"
+            onClick={() => setOpen(widget.id)}
+            className="min-h-11 rounded-lg bg-teal px-4 text-left text-sm font-semibold text-ink"
+          >
+            {widget.label}
+          </button>
+        ))}
       </div>
     </div>
   );
