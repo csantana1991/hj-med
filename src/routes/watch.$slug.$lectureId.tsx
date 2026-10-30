@@ -32,51 +32,29 @@ function WatchPage() {
       { source: "hj-caption", cc: true, videoId, text: lecture.title + ". " + lecture.channel },
       "*",
     );
-    let timer = 0;
-    let player: {
-      getCurrentTime?: () => number;
-      getOption?: (module: string, option: string) => { languageCode?: string } | null;
-      destroy?: () => void;
-    } | null = null;
-    const boot = () => {
-      const YT = (window as unknown as { YT?: { Player: new (el: Element, opts: object) => typeof player } }).YT;
-      const iframe = document.getElementById("hj-yt");
-      if (!YT?.Player || !iframe) return;
-      player = new YT.Player(iframe, {
-        events: {
-          onReady: () => {
-            timer = window.setInterval(() => {
-              let on = false;
-              try {
-                const track = player?.getOption?.("captions", "track");
-                on = !!(track && track.languageCode);
-              } catch {
-                on = false;
-              }
-              if (!on || !player?.getCurrentTime) return;
-              window.parent.postMessage(
-                { source: "hj-caption", cc: true, videoId, t: player.getCurrentTime() },
-                "*",
-              );
-            }, 1500);
-          },
-        },
-      });
-    };
-    const host = window as unknown as { YT?: { Player?: unknown }; onYouTubeIframeAPIReady?: () => void };
-    if (host.YT?.Player) boot();
-    else {
-      host.onYouTubeIframeAPIReady = boot;
-      if (!document.querySelector("script[data-yt-api]")) {
-        const script = document.createElement("script");
-        script.src = "https://www.youtube.com/iframe_api";
-        script.dataset.ytApi = "1";
-        document.head.appendChild(script);
+    const onYt = (event: MessageEvent) => {
+      if (String(event.origin || "").indexOf("youtube.com") < 0) return;
+      let payload: { info?: { currentTime?: number } } | null = null;
+      if (typeof event.data === "string") {
+        try { payload = JSON.parse(event.data); } catch { return; }
+      } else if (event.data && typeof event.data === "object") {
+        payload = event.data as { info?: { currentTime?: number } };
       }
-    }
+      const time = payload?.info?.currentTime;
+      if (typeof time !== "number") return;
+      window.parent.postMessage({ source: "hj-caption", cc: true, videoId, t: time }, "*");
+    };
+    window.addEventListener("message", onYt);
+    const poll = window.setInterval(() => {
+      const frame = document.getElementById("hj-yt") as HTMLIFrameElement | null;
+      const win = frame?.contentWindow;
+      if (!win) return;
+      win.postMessage(JSON.stringify({ event: "listening", id: "hj-yt", channel: "widget" }), "*");
+      win.postMessage(JSON.stringify({ event: "command", func: "getCurrentTime", args: [], id: "hj-yt", channel: "widget" }), "*");
+    }, 1000);
     return () => {
-      window.clearInterval(timer);
-      try { player?.destroy?.(); } catch { /* the page is leaving */ }
+      window.removeEventListener("message", onYt);
+      window.clearInterval(poll);
     };
   }, [lecture]);
 
