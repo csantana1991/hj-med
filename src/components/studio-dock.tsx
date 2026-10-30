@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const WIDGETS = [
   { id: "radreview", label: "RAD REVIEW" },
@@ -16,10 +16,31 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
   const [open, setOpen] = useState<string | null>("radatlas");
   const chosen = WIDGETS.find((widget) => widget.id === open);
 
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
   useEffect(() => {
     if (window.parent === window) return;
     window.parent.postMessage({ source: "hj-layout", mode: "fit" }, "*");
   }, [open]);
+
+  useEffect(() => {
+    const send = (q: string) => {
+      const frame = frameRef.current;
+      if (!frame || !q || q.length < 3 || /meta image/i.test(q)) return;
+      try { frame.contentWindow?.postMessage({ type: "studio-query", q }, "*"); } catch { /* widget not ready */ }
+    };
+    if (title) {
+      send(title);
+      window.setTimeout(() => send(title), 800);
+    }
+    const onMsg = (event: MessageEvent) => {
+      const data = event.data as { type?: string; q?: string } | null;
+      if (!data || data.type !== "studio-query" || !data.q) return;
+      send(data.q);
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, [open, title]);
 
   return (
     <div className="flex min-w-0 flex-col" style={{ height: "calc(100vh - 150px)", minHeight: "360px" }}>
@@ -46,6 +67,7 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
             {chosen ? chosen.label : "Rad Atlas"}
           </div>
           <iframe
+            ref={frameRef}
             title={chosen ? chosen.label : "Rad Atlas"}
             src={`${HOST}?view=${chosen ? chosen.id : "radatlas"}&embed=1&q=${encodeURIComponent(title)}`}
             className="min-h-0 w-full flex-1 border-0 bg-ink"
