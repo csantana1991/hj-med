@@ -13,39 +13,32 @@ const WIDGETS = [
 const HOST = "https://teaching-studios.vercel.app/studio/NucMed-Board-Studio.html";
 
 export function StudioDock({ title }: { title: string }) {
-  const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [open, setOpen] = useState<string | null>(null);
+  const src = open ? `${HOST}?view=${open}&embed=1&q=${encodeURIComponent(title)}` : "";
 
   return (
-    <div className="mt-4 grid gap-3">
-      {WIDGETS.map((widget) => {
-        const on = !!open[widget.id];
-        const src = `${HOST}?view=${widget.id}&embed=1&q=${encodeURIComponent(title)}`;
-        return (
-          <section
-            key={widget.id}
-            className="flex min-h-[420px] w-full min-w-0 flex-col overflow-hidden rounded-lg border border-line bg-ink"
-          >
-            <button
-              type="button"
-              onClick={() => setOpen((prev) => ({ ...prev, [widget.id]: !prev[widget.id] }))}
-              className={
-                on
-                  ? "min-h-11 shrink-0 bg-teal px-4 text-sm font-semibold text-ink"
-                  : "min-h-11 shrink-0 border-b border-line px-4 text-sm text-cream"
-              }
-            >
-              {widget.label}
-            </button>
-            {on ? (
-              <iframe title={widget.label} src={src} className="h-[380px] w-full border-0 bg-ink" allow="autoplay" />
-            ) : (
-              <div className="grid h-[380px] place-items-center px-4 text-center text-sm text-dim">
-                Blank until you open {widget.label}
-              </div>
-            )}
-          </section>
-        );
-      })}
-    </div>
+    <section className="flex min-w-0 flex-col gap-2">
+      {WIDGETS.map((widget) => (
+        <button
+          key={widget.id}
+          type="button"
+          onClick={() => setOpen((current) => (current === widget.id ? null : widget.id))}
+          className={
+            open === widget.id
+              ? "min-h-11 rounded-full bg-teal px-4 text-left text-sm font-semibold text-ink"
+              : "min-h-11 rounded-full border border-line px-4 text-left text-sm text-cream"
+          }
+        >
+          {widget.label}
+        </button>
+      ))}
+      {open ? (
+        <iframe title={open} src={src} className="h-[70vh] w-full rounded-lg border border-line bg-ink" allow="autoplay" />
+      ) : (
+        <div className="grid h-36 place-items-center rounded-lg border border-line px-3 text-center text-sm text-dim">
+          Open a widget and the live images show here.
+        </div>
+      )}
+    </section>
   );
 }
