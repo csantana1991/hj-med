@@ -129,8 +129,8 @@ function WatchPage() {
 
       <div className="mt-4">
         <StudioDock title={lecture.title}>
-          <div className="overflow-hidden rounded-lg border border-line bg-ink">
-            <YoutubeSlot id={lecture.id} title={lecture.title} />
+          <div className="h-full min-h-0 overflow-hidden rounded-lg border border-line bg-ink">
+            <YoutubeSlot id={lecture.id} title={lecture.title} fill />
           </div>
           <p className="mt-2 text-sm text-muted">
             If the player is blocked,{" "}
