@@ -29,7 +29,7 @@ function WatchPage() {
     if (!lecture || window.parent === window) return;
     const videoId = lecture.id;
     window.parent.postMessage(
-      { source: "hj-caption", cc: true, videoId, text: lecture.title + ". " + lecture.channel },
+      { source: "hj-caption", cc: true, videoId, text: lecture.title },
       "*",
     );
     const onYt = (event: MessageEvent) => {
