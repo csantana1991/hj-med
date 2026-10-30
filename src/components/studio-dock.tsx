@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const WIDGETS = [
   { id: "radreview", label: "RAD REVIEW" },
@@ -16,6 +16,24 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
   const [open, setOpen] = useState<string | null>(null);
   const chosen = WIDGETS.find((widget) => widget.id === open);
   const rest = WIDGETS.filter((widget) => widget.id !== open);
+  const tall = open === "rrultimate";
+
+  useEffect(() => {
+    if (window.parent === window) return;
+    if (!tall) {
+      window.parent.postMessage({ source: "hj-layout", mode: "fit" }, "*");
+      return;
+    }
+    const send = () => {
+      window.parent.postMessage(
+        { source: "hj-layout", mode: "down", height: Math.max(document.documentElement.scrollHeight, 1700) },
+        "*",
+      );
+    };
+    send();
+    const timer = window.setInterval(send, 1000);
+    return () => window.clearInterval(timer);
+  }, [tall]);
 
   return (
     <div className="min-w-0">
@@ -42,7 +60,7 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
           <iframe
             title={chosen.label}
             src={`${HOST}?view=${chosen.id}&embed=1&q=${encodeURIComponent(title)}`}
-            className="h-[70vh] w-full border-0 bg-ink"
+            className={tall ? "h-[1600px] w-full border-0 bg-ink" : "h-[70vh] w-full border-0 bg-ink"}
             allow="autoplay"
           />
         </section>
