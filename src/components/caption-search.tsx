@@ -46,24 +46,28 @@ export function CaptionSearch({ title }: { title: string }) {
   }, [q]);
 
   return (
-    <section className="sticky top-0 z-30 mt-4 rounded-lg border border-line bg-ink p-3">
-      <label className="block text-xs font-semibold tracking-widest text-teal-2 uppercase" htmlFor="caption-live">
-        Live search from captions
-      </label>
-      <input
-        id="caption-live"
-        value={q}
-        readOnly
-        className="mt-2 h-11 w-full rounded-full border border-line bg-surface px-4 text-sm text-cream"
-      />
-      <div className="mt-3 flex gap-3 overflow-x-auto">
-        {shots.map((shot) => (
-          <figure key={shot.src} className="w-40 shrink-0">
-            <img src={shot.src} alt={shot.title} className="h-24 w-40 rounded-md object-cover" referrerPolicy="no-referrer" />
-            <figcaption className="mt-1 line-clamp-2 text-xs text-dim">{shot.title}</figcaption>
-          </figure>
-        ))}
+    <section className="border-b border-[#57d6c4] bg-[#042f2e] px-4 py-2">
+      <div className="flex items-center gap-3">
+        <label className="shrink-0 rounded-full bg-[#57d6c4] px-3 py-1 text-xs font-bold tracking-widest text-[#082027]" htmlFor="caption-live">
+          LIVE SEARCH
+        </label>
+        <input
+          id="caption-live"
+          value={q}
+          readOnly
+          className="h-10 min-w-0 flex-1 rounded-full border border-line bg-white px-4 text-sm text-ink"
+        />
       </div>
+      {shots.length ? (
+        <div className="mt-2 flex gap-2 overflow-x-auto">
+          {shots.map((shot) => (
+            <figure key={shot.src} className="w-28 shrink-0">
+              <img src={shot.src} alt={shot.title} className="h-16 w-28 rounded object-cover" referrerPolicy="no-referrer" />
+              <figcaption className="mt-1 line-clamp-2 text-[11px] text-cream">{shot.title}</figcaption>
+            </figure>
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 }

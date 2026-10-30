@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { CaptionSearch } from "@/components/caption-search";
 import { useProgress } from "@/lib/progress";
 
-export function Shell({ children, wide }: { children: ReactNode; wide?: boolean }) {
+export function Shell({ children, wide, live }: { children: ReactNode; wide?: boolean; live?: string }) {
   useEffect(() => {
     void useProgress.persist.rehydrate();
   }, []);
@@ -11,7 +12,8 @@ export function Shell({ children, wide }: { children: ReactNode; wide?: boolean 
 
   return (
     <div className="min-h-screen bg-bg text-cream">
-      <header className="sticky top-0 z-20 border-b border-line bg-bg/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-40 border-b border-line bg-bg">
+        {live ? <CaptionSearch title={live} /> : null}
         <div className={`flex items-center justify-between gap-3 py-3 ${frame}`}>
           <Link to="/" className="flex items-baseline gap-2">
             <span className="font-serif text-xl leading-none text-cream">HJ</span>

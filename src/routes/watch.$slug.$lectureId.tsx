@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { LocalClips } from "@/components/local-clips";
 import { StudioDock } from "@/components/studio-dock";
 import { TeachingFiles } from "@/components/teaching-files";
-import { CaptionSearch } from "@/components/caption-search";
 import { YoutubeSlot } from "@/components/youtube-slot";
 import { Shell } from "@/components/shell";
 import { coverage, formatDuration, lectureOf, programBySlug, schoolName } from "@/lib/atlas";
@@ -78,7 +77,7 @@ function WatchPage() {
   const watched = seen.has(lecture.id);
 
   return (
-    <Shell wide>
+    <Shell wide live={lecture.title}>
       <Link to="/programs/$slug" params={{ slug: program.slug }} className="text-sm text-teal-2">
         {program.name}
       </Link>
@@ -116,7 +115,6 @@ function WatchPage() {
           </Link>
         ) : null}
       </div>
-      <CaptionSearch title={lecture.title} />
       <h1 className="mt-2 font-serif text-2xl leading-snug text-cream sm:text-3xl">{lecture.title}</h1>
       <p className="mt-2 text-sm text-dim">
         {lecture.channel} · {formatDuration(lecture.sec)} · public YouTube lecture
