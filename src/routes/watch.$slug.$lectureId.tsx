@@ -142,7 +142,7 @@ function WatchPage() {
         rewrite it, score it, or turn it into a board result. Accredited training and
         the proctored exam still sit outside this player.
       </p>
-      <TeachingFiles trackKey={program.track} />
+      <TeachingFiles trackKey={program.track} query={lecture.title} />
     </Shell>
   );
 }
