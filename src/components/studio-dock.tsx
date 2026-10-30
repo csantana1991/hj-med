@@ -5,6 +5,7 @@ const WIDGETS = [
   { id: "radatlas", label: "Rad Atlas" },
   { id: "caseqa", label: "Q+A" },
   { id: "rrultimate", label: "RAD REVIEW Ultimate" },
+  { id: "metaimage", label: "Meta Image" },
   { id: "academy", label: "Academy" },
   { id: "nucleus", label: "Nucleus" },
 ] as const;
