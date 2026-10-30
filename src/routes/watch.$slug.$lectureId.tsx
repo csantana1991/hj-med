@@ -97,56 +97,52 @@ function WatchPage() {
 
       {program.track === "nm" ? <LocalClips /> : null}
 
-      <div className="mt-4 grid items-start gap-3 lg:grid-cols-[minmax(0,1fr)_210px]">
-        <div className="min-w-0">
-          <div className="overflow-hidden rounded-lg border border-line bg-ink">
-            <YoutubeSlot id={lecture.id} title={lecture.title} />
-          </div>
-          <p className="mt-2 text-sm text-muted">
-            If the player is blocked,{" "}
-            <a
-              className="text-teal-2 underline"
-              href={`https://www.youtube.com/watch?v=${lecture.id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              open it on YouTube
-            </a>
-            . The lecture stays the creator’s, not HJ Med’s.
-          </p>
-        </div>
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={() => toggle(lecture.id)}
-            className={
-              watched
-                ? "min-h-11 rounded-lg bg-cream px-4 text-sm font-semibold text-ink"
-                : "min-h-11 rounded-lg bg-teal px-4 text-sm font-semibold text-ink"
-            }
-          >
-            {watched ? "Watched — tap to undo" : "Mark as watched"}
-          </button>
-          {next ? (
-            <Link
-              to="/watch/$slug/$lectureId"
-              params={{ slug: program.slug, lectureId: next }}
-              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line px-4 text-sm text-cream"
-            >
-              Next lecture
-            </Link>
-          ) : null}
-          {prev ? (
-            <Link
-              to="/watch/$slug/$lectureId"
-              params={{ slug: program.slug, lectureId: prev }}
-              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line px-4 text-sm text-dim"
-            >
-              Previous
-            </Link>
-          ) : null}
-        </div>
+      <div className="mt-4 overflow-hidden rounded-lg border border-line bg-ink">
+        <YoutubeSlot id={lecture.id} title={lecture.title} />
       </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => toggle(lecture.id)}
+          className={
+            watched
+              ? "min-h-11 rounded-lg bg-cream px-4 text-sm font-semibold text-ink"
+              : "min-h-11 rounded-lg bg-teal px-4 text-sm font-semibold text-ink"
+          }
+        >
+          {watched ? "Watched — tap to undo" : "Mark as watched"}
+        </button>
+        {next ? (
+          <Link
+            to="/watch/$slug/$lectureId"
+            params={{ slug: program.slug, lectureId: next }}
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-4 text-sm text-cream"
+          >
+            Next lecture
+          </Link>
+        ) : null}
+        {prev ? (
+          <Link
+            to="/watch/$slug/$lectureId"
+            params={{ slug: program.slug, lectureId: prev }}
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-4 text-sm text-cream"
+          >
+            Previous
+          </Link>
+        ) : null}
+      </div>
+      <p className="mt-2 text-sm text-muted">
+        If the player is blocked,{" "}
+        <a
+          className="text-teal-2 underline"
+          href={`https://www.youtube.com/watch?v=${lecture.id}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          open it on YouTube
+        </a>
+        . The lecture stays the creator’s, not HJ Med’s.
+      </p>
 
       <StudioDock title={lecture.title} />
 
