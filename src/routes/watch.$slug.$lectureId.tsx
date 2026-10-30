@@ -122,9 +122,8 @@ function WatchPage() {
 
       {program.track === "nm" ? <LocalClips /> : null}
 
-      <div className="mt-4 grid items-start gap-4 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)]">
-        <StudioDock title={lecture.title} />
-        <div className="min-w-0">
+      <div className="mt-4">
+        <StudioDock title={lecture.title}>
           <div className="overflow-hidden rounded-lg border border-line bg-ink">
             <YoutubeSlot id={lecture.id} title={lecture.title} />
           </div>
@@ -135,7 +134,7 @@ function WatchPage() {
             </a>
             . The lecture stays the creator’s, not HJ Med’s.
           </p>
-        </div>
+        </StudioDock>
       </div>
 
       <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
