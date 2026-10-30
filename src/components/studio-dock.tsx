@@ -52,19 +52,36 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
           </button>
         ))}
       </div>
-      {children}
-      {chosen ? (
-        <section className={tall ? "mt-3 w-full bg-ink" : "mt-3 w-full overflow-hidden rounded-lg border border-line bg-ink"}>
-          <div className="min-h-11 bg-teal px-4 py-3 text-sm font-semibold text-ink">{chosen.label}</div>
-          <iframe
-            title={chosen.label}
-            src={`${HOST}?view=${chosen.id}&embed=1&q=${encodeURIComponent(title)}`}
-            className="w-full border-0 bg-ink"
-            style={tall ? { height: "920px", minHeight: "920px" } : { height: "70vh" }}
-            allow="autoplay"
-          />
+      <div className="grid items-start gap-3 lg:grid-cols-2">
+        <div className="min-w-0">{children}</div>
+        <section className="min-h-[46vh] overflow-hidden rounded-lg border border-line bg-ink">
+          <div className="min-h-11 bg-teal px-4 py-3 text-sm font-semibold text-ink">
+            {chosen ? chosen.label : "Widgets"}
+          </div>
+          {chosen ? (
+            <iframe
+              title={chosen.label}
+              src={`${HOST}?view=${chosen.id}&embed=1&q=${encodeURIComponent(title)}`}
+              className="w-full border-0 bg-ink"
+              style={tall ? { height: "920px", minHeight: "920px" } : { height: "46vh", minHeight: "320px" }}
+              allow="autoplay"
+            />
+          ) : (
+            <div className="grid gap-2 p-3 sm:grid-cols-2">
+              {WIDGETS.map((widget) => (
+                <button
+                  key={widget.id}
+                  type="button"
+                  onClick={() => setOpen(widget.id)}
+                  className="min-h-16 rounded-lg border border-line px-3 text-left text-sm font-semibold text-cream"
+                >
+                  {widget.label}
+                </button>
+              ))}
+            </div>
+          )}
         </section>
-      ) : null}
+      </div>
     </div>
   );
 }
