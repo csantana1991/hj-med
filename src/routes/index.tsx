@@ -5,7 +5,12 @@ import { programs, schools, tracks } from "@/data/registry";
 import { coverage, formatHours, librarySeconds, schoolName } from "@/lib/atlas";
 import { doneSet, useProgress } from "@/lib/progress";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    list: search.list === "all" ? ("all" as const) : undefined,
+  }),
+  component: Home,
+});
 
 const groups = [
   "All",
@@ -20,8 +25,9 @@ const groups = [
 ] as const;
 
 function Home() {
+  const { list } = Route.useSearch();
   const [school, setSchool] = useState<"all" | "harvard" | "hopkins" | "emory">("all");
-  const [kind, setKind] = useState<"all" | "residency" | "fellowship">("residency");
+  const [kind, setKind] = useState<"all" | "residency" | "fellowship">(list === "all" ? "all" : "residency");
   const [group, setGroup] = useState<(typeof groups)[number]>("All");
   const [q, setQ] = useState("");
   const done = useProgress((s) => s.done);
