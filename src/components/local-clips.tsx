@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const clips = [
   {
@@ -45,6 +45,14 @@ const clips = [
 export function LocalClips() {
   const [id, setId] = useState<(typeof clips)[number]["id"]>("dotatate");
   const clip = clips.find((item) => item.id === id) ?? clips[0];
+
+  useEffect(() => {
+    if (window.parent === window) return;
+    window.parent.postMessage(
+      { source: "hj-caption", cc: true, text: clip.title + ". " + clip.caption },
+      "*",
+    );
+  }, [clip]);
 
   return (
     <section className="mt-8">

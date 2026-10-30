@@ -24,6 +24,61 @@ function WatchPage() {
     if (program && lecture) remember({ slug: program.slug, lectureId: lecture.id });
   }, [program, lecture, remember]);
 
+  useEffect(() => {
+    if (!lecture || window.parent === window) return;
+    const videoId = lecture.id;
+    window.parent.postMessage(
+      { source: "hj-caption", cc: true, videoId, text: lecture.title + ". " + lecture.channel },
+      "*",
+    );
+    let timer = 0;
+    let player: {
+      getCurrentTime?: () => number;
+      getOption?: (module: string, option: string) => { languageCode?: string } | null;
+      destroy?: () => void;
+    } | null = null;
+    const boot = () => {
+      const YT = (window as unknown as { YT?: { Player: new (el: Element, opts: object) => typeof player } }).YT;
+      const iframe = document.getElementById("hj-yt");
+      if (!YT?.Player || !iframe) return;
+      player = new YT.Player(iframe, {
+        events: {
+          onReady: () => {
+            timer = window.setInterval(() => {
+              let on = false;
+              try {
+                const track = player?.getOption?.("captions", "track");
+                on = !!(track && track.languageCode);
+              } catch {
+                on = false;
+              }
+              if (!on || !player?.getCurrentTime) return;
+              window.parent.postMessage(
+                { source: "hj-caption", cc: true, videoId, t: player.getCurrentTime() },
+                "*",
+              );
+            }, 1500);
+          },
+        },
+      });
+    };
+    const host = window as unknown as { YT?: { Player?: unknown }; onYouTubeIframeAPIReady?: () => void };
+    if (host.YT?.Player) boot();
+    else {
+      host.onYouTubeIframeAPIReady = boot;
+      if (!document.querySelector("script[data-yt-api]")) {
+        const script = document.createElement("script");
+        script.src = "https://www.youtube.com/iframe_api";
+        script.dataset.ytApi = "1";
+        document.head.appendChild(script);
+      }
+    }
+    return () => {
+      window.clearInterval(timer);
+      try { player?.destroy?.(); } catch { /* the page is leaving */ }
+    };
+  }, [lecture]);
+
   if (!program || !lecture) {
     return (
       <Shell>
