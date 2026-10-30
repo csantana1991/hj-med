@@ -119,23 +119,23 @@ function WatchPage() {
 
       {program.track === "nm" ? <LocalClips /> : null}
 
-      <div className="mt-4 overflow-hidden rounded-lg border border-line bg-ink">
-        <YoutubeSlot id={lecture.id} title={lecture.title} />
-      </div>
-      <p className="mt-2 text-sm text-muted">
-        If the player is blocked,{" "}
-        <a
-          className="text-teal-2 underline"
-          href={`https://www.youtube.com/watch?v=${lecture.id}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          open it on YouTube
-        </a>
-        . The lecture stays the creator’s, not HJ Med’s.
-      </p>
-
-      <StudioDock title={lecture.title} />
+      <StudioDock title={lecture.title}>
+        <div className="overflow-hidden rounded-lg border border-line bg-ink">
+          <YoutubeSlot id={lecture.id} title={lecture.title} />
+        </div>
+        <p className="mt-2 text-sm text-muted">
+          If the player is blocked,{" "}
+          <a
+            className="text-teal-2 underline"
+            href={`https://www.youtube.com/watch?v=${lecture.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            open it on YouTube
+          </a>
+          . The lecture stays the creator’s, not HJ Med’s.
+        </p>
+      </StudioDock>
 
       <div className="mt-4 flex flex-wrap gap-2">
         <button
