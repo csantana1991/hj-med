@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { LocalClips } from "@/components/local-clips";
 import { StudioDock } from "@/components/studio-dock";
 import { TeachingFiles } from "@/components/teaching-files";
+import { CaptionSearch } from "@/components/caption-search";
 import { YoutubeSlot } from "@/components/youtube-slot";
 import { Shell } from "@/components/shell";
 import { coverage, formatDuration, lectureOf, programBySlug, schoolName } from "@/lib/atlas";
@@ -119,6 +120,7 @@ function WatchPage() {
       <p className="mt-2 text-sm text-dim">
         {lecture.channel} · {formatDuration(lecture.sec)} · public YouTube lecture
       </p>
+      <CaptionSearch title={lecture.title} />
 
       {program.track === "nm" ? <LocalClips /> : null}
 
