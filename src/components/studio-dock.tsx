@@ -15,7 +15,6 @@ const HOST = "https://teaching-studios.vercel.app/studio/NucMed-Board-Studio.htm
 export function StudioDock({ title, children }: { title: string; children?: ReactNode }) {
   const [open, setOpen] = useState<string | null>(null);
   const chosen = WIDGETS.find((widget) => widget.id === open);
-  const rest = WIDGETS.filter((widget) => widget.id !== open);
   const tall = open === "rrultimate";
 
   useEffect(() => {
@@ -66,18 +65,6 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
           />
         </section>
       ) : null}
-      <div className="mt-3 grid gap-3 md:grid-cols-2">
-        {rest.map((widget) => (
-          <button
-            key={widget.id}
-            type="button"
-            onClick={() => setOpen(widget.id)}
-            className="min-h-11 rounded-lg bg-teal px-4 text-left text-sm font-semibold text-ink"
-          >
-            {widget.label}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
