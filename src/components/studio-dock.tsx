@@ -62,7 +62,7 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
             title={chosen ? chosen.label : "Rad Atlas"}
             src={`${HOST}?view=${chosen ? chosen.id : "radatlas"}&embed=1&q=${encodeURIComponent(title)}`}
             className="w-full border-0 bg-ink"
-            style={{ height: "min(46vh, 400px)", minHeight: "280px" }}
+            style={{ height: "calc(100vh - 140px)", minHeight: "640px" }}
             allow="autoplay"
           />
         </section>
