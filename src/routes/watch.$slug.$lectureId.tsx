@@ -119,55 +119,59 @@ function WatchPage() {
 
       {program.track === "nm" ? <LocalClips /> : null}
 
-      <StudioDock title={lecture.title}>
-        <div className="overflow-hidden rounded-lg border border-line bg-ink">
-          <YoutubeSlot id={lecture.id} title={lecture.title} />
+      <div className="mt-4 grid items-start gap-3 lg:grid-cols-[minmax(0,1fr)_210px]">
+        <div className="min-w-0">
+          <div className="overflow-hidden rounded-lg border border-line bg-ink">
+            <YoutubeSlot id={lecture.id} title={lecture.title} />
+          </div>
+          <p className="mt-2 text-sm text-muted">
+            If the player is blocked,{" "}
+            <a
+              className="text-teal-2 underline"
+              href={`https://www.youtube.com/watch?v=${lecture.id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              open it on YouTube
+            </a>
+            . The lecture stays the creator’s, not HJ Med’s.
+          </p>
         </div>
-        <p className="mt-2 text-sm text-muted">
-          If the player is blocked,{" "}
-          <a
-            className="text-teal-2 underline"
-            href={`https://www.youtube.com/watch?v=${lecture.id}`}
-            target="_blank"
-            rel="noreferrer"
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => toggle(lecture.id)}
+            className={
+              watched
+                ? "min-h-11 rounded-lg bg-cream px-4 text-sm font-semibold text-ink"
+                : "min-h-11 rounded-lg bg-teal px-4 text-sm font-semibold text-ink"
+            }
           >
-            open it on YouTube
-          </a>
-          . The lecture stays the creator’s, not HJ Med’s.
-        </p>
-      </StudioDock>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => toggle(lecture.id)}
-          className={
-            watched
-              ? "min-h-11 rounded-lg bg-cream px-4 text-sm font-semibold text-ink"
-              : "min-h-11 rounded-lg bg-teal px-4 text-sm font-semibold text-ink"
-          }
-        >
-          {watched ? "Watched — tap to undo" : "Mark as watched"}
-        </button>
-        {next ? (
-          <Link
-            to="/watch/$slug/$lectureId"
-            params={{ slug: program.slug, lectureId: next }}
-            className="inline-flex min-h-11 items-center rounded-lg border border-line px-4 text-sm text-cream"
-          >
-            Next lecture
-          </Link>
-        ) : null}
-        {prev ? (
-          <Link
-            to="/watch/$slug/$lectureId"
-            params={{ slug: program.slug, lectureId: prev }}
-            className="inline-flex min-h-11 items-center rounded-lg border border-line px-4 text-sm text-dim"
-          >
-            Previous
-          </Link>
-        ) : null}
+            {watched ? "Watched — tap to undo" : "Mark as watched"}
+          </button>
+          {next ? (
+            <Link
+              to="/watch/$slug/$lectureId"
+              params={{ slug: program.slug, lectureId: next }}
+              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line px-4 text-sm text-cream"
+            >
+              Next lecture
+            </Link>
+          ) : null}
+          {prev ? (
+            <Link
+              to="/watch/$slug/$lectureId"
+              params={{ slug: program.slug, lectureId: prev }}
+              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line px-4 text-sm text-dim"
+            >
+              Previous
+            </Link>
+          ) : null}
+        </div>
       </div>
+
+      <StudioDock title={lecture.title} />
+
       <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
         Use the lecture for the blueprint heading it actually teaches. HJ Med does not
         rewrite it, score it, or turn it into a board result. Accredited training and
