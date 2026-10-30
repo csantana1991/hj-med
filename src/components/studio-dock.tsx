@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const WIDGETS = [
   { id: "radreview", label: "RAD REVIEW" },
@@ -11,7 +11,7 @@ const WIDGETS = [
 
 const HOST = "https://teaching-studios.vercel.app/studio/NucMed-Board-Studio.html";
 
-export function StudioDock({ title }: { title: string }) {
+export function StudioDock({ title, children }: { title: string; children?: ReactNode }) {
   const [open, setOpen] = useState<string>("radatlas");
 
   useEffect(() => {
@@ -30,30 +30,33 @@ export function StudioDock({ title }: { title: string }) {
   const src = `${HOST}?view=${open}&embed=1&q=${encodeURIComponent(title)}`;
 
   return (
-    <section className="mt-4 rounded-lg border border-line bg-surface">
-      <div className="flex flex-wrap gap-2 p-3">
-        {WIDGETS.map((widget) => (
-          <button
-            key={widget.id}
-            type="button"
-            onClick={() => setOpen(widget.id)}
-            className={
-              open === widget.id
-                ? "min-h-11 rounded-full bg-teal px-4 text-sm font-semibold text-ink"
-                : "min-h-11 rounded-full border border-line px-4 text-sm text-cream"
-            }
-          >
-            {widget.label}
-          </button>
-        ))}
-      </div>
-      <iframe
-        id="studioWidget"
-        title={open}
-        src={src}
-        className="h-[68vh] w-full border-0 bg-ink"
-        allow="autoplay"
-      />
-    </section>
+    <div className="mt-4 grid items-start gap-3 lg:grid-cols-[minmax(260px,340px)_minmax(0,1fr)]">
+      <section className="order-2 overflow-hidden rounded-lg border border-line bg-surface lg:order-1">
+        <div className="flex flex-col gap-2 p-3">
+          {WIDGETS.map((widget) => (
+            <button
+              key={widget.id}
+              type="button"
+              onClick={() => setOpen(widget.id)}
+              className={
+                open === widget.id
+                  ? "min-h-11 rounded-full bg-teal px-4 text-sm font-semibold text-ink"
+                  : "min-h-11 rounded-full border border-line px-4 text-sm text-cream"
+              }
+            >
+              {widget.label}
+            </button>
+          ))}
+        </div>
+        <iframe
+          id="studioWidget"
+          title={open}
+          src={src}
+          className="h-[70vh] w-full border-0 bg-ink"
+          allow="autoplay"
+        />
+      </section>
+      <div className="order-1 min-w-0 lg:order-2">{children}</div>
+    </div>
   );
 }
