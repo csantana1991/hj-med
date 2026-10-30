@@ -116,11 +116,11 @@ function WatchPage() {
           </Link>
         ) : null}
       </div>
+      <CaptionSearch title={lecture.title} />
       <h1 className="mt-2 font-serif text-2xl leading-snug text-cream sm:text-3xl">{lecture.title}</h1>
       <p className="mt-2 text-sm text-dim">
         {lecture.channel} · {formatDuration(lecture.sec)} · public YouTube lecture
       </p>
-      <CaptionSearch title={lecture.title} />
 
       {program.track === "nm" ? <LocalClips /> : null}
 

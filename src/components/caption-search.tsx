@@ -46,7 +46,7 @@ export function CaptionSearch({ title }: { title: string }) {
   }, [q]);
 
   return (
-    <section className="mt-4 rounded-lg border border-line bg-ink p-3">
+    <section className="sticky top-0 z-30 mt-4 rounded-lg border border-line bg-ink p-3">
       <label className="block text-xs font-semibold tracking-widest text-teal-2 uppercase" htmlFor="caption-live">
         Live search from captions
       </label>
