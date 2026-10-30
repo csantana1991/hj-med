@@ -55,12 +55,13 @@ export function StudioDock({ title, children }: { title: string; children?: Reac
       </div>
       {children}
       {chosen ? (
-        <section className="mt-3 w-full overflow-hidden rounded-lg border border-line bg-ink">
+        <section className={tall ? "mt-3 w-full bg-ink" : "mt-3 w-full overflow-hidden rounded-lg border border-line bg-ink"}>
           <div className="min-h-11 bg-teal px-4 py-3 text-sm font-semibold text-ink">{chosen.label}</div>
           <iframe
             title={chosen.label}
             src={`${HOST}?view=${chosen.id}&embed=1&q=${encodeURIComponent(title)}`}
-            className={tall ? "h-[1600px] w-full border-0 bg-ink" : "h-[70vh] w-full border-0 bg-ink"}
+            className="w-full border-0 bg-ink"
+            style={tall ? { height: "920px", minHeight: "920px" } : { height: "70vh" }}
             allow="autoplay"
           />
         </section>
