@@ -2,15 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Shell } from "@/components/shell";
 import { programs, schools, tracks } from "@/data/registry";
-import { coverage, formatHours, librarySeconds, schoolName } from "@/lib/atlas";
+import { coverageFor, formatHours, librarySeconds, schoolName } from "@/lib/atlas";
 import { doneSet, useProgress } from "@/lib/progress";
 
-export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    list: search.list === "all" ? ("all" as const) : undefined,
-  }),
-  component: Home,
-});
+export const Route = createFileRoute("/")({ component: Home });
 
 const groups = [
   "All",
@@ -25,9 +20,8 @@ const groups = [
 ] as const;
 
 function Home() {
-  const { list } = Route.useSearch();
   const [school, setSchool] = useState<"all" | "harvard" | "hopkins" | "emory">("all");
-  const [kind, setKind] = useState<"all" | "residency" | "fellowship">(list === "all" ? "all" : "residency");
+  const [kind, setKind] = useState<"all" | "residency" | "fellowship">("residency");
   const [group, setGroup] = useState<(typeof groups)[number]>("All");
   const [q, setQ] = useState("");
   const done = useProgress((s) => s.done);
@@ -156,7 +150,7 @@ function Home() {
         <ul className="mt-2 divide-y divide-line">
           {filtered.map((p) => {
             const result = results?.[p.track];
-            const cov = coverage(p.track, seen);
+            const cov = coverageFor(p, seen);
             return (
               <li key={p.slug}>
                 <Link

@@ -1,4 +1,4 @@
-import type { Lecture, Program, Track } from "@/data/catalog";
+import type { Lecture, Module, Program, Track } from "@/data/catalog";
 
 export const nmLectures: Lecture[] = [
   {
@@ -155,6 +155,76 @@ export const nmLectures: Lecture[] = [
     sec: 440,
     tags: ["nm"],
   },
+  {
+    id: "5jiWKoN9o1M",
+    title: "Anatomy of CT scans: Introduction",
+    channel: "The Noted Anatomist",
+    sec: 480,
+    tags: ["nm"],
+  },
+  {
+    id: "IdC1xpzvQmM",
+    title: "Anatomy of CT scans: Thoracic cavity",
+    channel: "The Noted Anatomist",
+    sec: 669,
+    tags: ["nm"],
+  },
+  {
+    id: "fUZx47OkOvs",
+    title: "Anatomy of CT scans: Abdomen",
+    channel: "The Noted Anatomist",
+    sec: 907,
+    tags: ["nm"],
+  },
+  {
+    id: "GSL8-tvgaiw",
+    title: "CT Cross-Sectional Anatomy of the Thorax, Abdomen, and Pelvis",
+    channel: "Rad Tech Hub By Medical Professionals",
+    sec: 3853,
+    tags: ["nm"],
+  },
+  {
+    id: "bAl3ht-kpVk",
+    title: "Introduction to Neuroradiology: basics of CT and MRI of the Brain",
+    channel: "The Neuroradiologist",
+    sec: 4131,
+    tags: ["nm"],
+  },
+  {
+    id: "thEQPZq9cH4",
+    title: "MRI Anatomy of the Brain: Lobes, Central Sulcus, and Ventricles",
+    channel: "Indian Radiologist",
+    sec: 1198,
+    tags: ["nm"],
+  },
+  {
+    id: "9IEtIWE_glQ",
+    title: "How to read an MRI of the abdomen",
+    channel: "First Look MRI",
+    sec: 291,
+    tags: ["nm"],
+  },
+  {
+    id: "Os3BXuRQoX8",
+    title: "How to read a brain MRI",
+    channel: "First Look MRI",
+    sec: 553,
+    tags: ["nm"],
+  },
+  {
+    id: "SeSKWgbohEo",
+    title: "FDG PET/CT Teaching File: Normal Distribution and Cases",
+    channel: "Nuclear MD",
+    sec: 1597,
+    tags: ["nm"],
+  },
+  {
+    id: "VsspJQVPmpc",
+    title: "PET/CT Search Pattern",
+    channel: "Search Pattern",
+    sec: 800,
+    tags: ["nm"],
+  },
 ];
 
 const ids = (...list: string[]) => list;
@@ -207,6 +277,39 @@ export const nmTrack: Track = {
     },
   ],
 };
+
+/** Public cross-section tapes for the Emory nuclear medicine residency only. */
+export const emoryAnatomyModules: Module[] = [
+  {
+    title: "CT anatomy",
+    lectureIds: ids(
+      "5jiWKoN9o1M",
+      "IdC1xpzvQmM",
+      "fUZx47OkOvs",
+      "GSL8-tvgaiw",
+      "_aw6d8ydgWA",
+    ),
+  },
+  {
+    title: "MRI anatomy",
+    lectureIds: ids("bAl3ht-kpVk", "thEQPZq9cH4", "9IEtIWE_glQ"),
+  },
+  {
+    title: "PET anatomy",
+    lectureIds: ids("SeSKWgbohEo", "VsspJQVPmpc"),
+  },
+  {
+    title: "Diagnosis",
+    lectureIds: ids(
+      "2THYEWmwAWc",
+      "t3KWtJ3iq4A",
+      "t4TNztPlqAQ",
+      "cO5TrqlII6o",
+      "743CylZmIxo",
+      "Os3BXuRQoX8",
+    ),
+  },
+];
 
 /** Existing atlas rows that should sit on the nuclear course. */
 export const programPatches: Record<string, Partial<Program>> = {

@@ -7,6 +7,7 @@ import {
 } from "@/data/registry";
 import { plates, trackFilms, type Plate } from "@/data/plates";
 import { extraById, extraByTrack, extraLectures, flagshipId } from "@/data/sittings";
+import { emoryAnatomyModules } from "@/data/nuclear";
 
 export function programBySlug(slug: string) {
   return programs.find((p) => p.slug === slug);
@@ -20,6 +21,27 @@ export function trackIds(trackKey: string): string[] {
   const ids = trackLectureIds(trackKey);
   const extra = extraByTrack[trackKey];
   if (extra && !ids.includes(extra)) return [...ids, extra];
+  return ids;
+}
+
+export function modulesFor(program: Program) {
+  const track = tracks[program.track];
+  const base = track?.modules ?? [];
+  if (program.slug !== "emory-nm") return base;
+  return [...base, ...emoryAnatomyModules];
+}
+
+export function programIds(program: Program): string[] {
+  const ids = [...trackIds(program.track)];
+  if (program.slug !== "emory-nm") return ids;
+  const seen = new Set(ids);
+  for (const mod of emoryAnatomyModules) {
+    for (const id of mod.lectureIds) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      ids.push(id);
+    }
+  }
   return ids;
 }
 
@@ -42,7 +64,14 @@ export function secondsOf(ids: string[]) {
 }
 
 export function coverage(trackKey: string, done: Set<string>) {
-  const ids = trackIds(trackKey);
+  return coverageOf(trackIds(trackKey), done);
+}
+
+export function coverageFor(program: Program, done: Set<string>) {
+  return coverageOf(programIds(program), done);
+}
+
+function coverageOf(ids: string[], done: Set<string>) {
   let watched = 0;
   let n = 0;
   for (const id of ids) {
@@ -78,7 +107,7 @@ export function formatHours(sec: number) {
 
 export function catalogSentence(program: Program) {
   const track = tracks[program.track];
-  const ids = trackIds(program.track);
+  const ids = programIds(program);
   const sec = secondsOf(ids);
   const hours = sec / 3600;
   if (!track) return "";

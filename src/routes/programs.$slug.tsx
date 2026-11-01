@@ -9,10 +9,11 @@ import { primers, tracks, trackLectureIds } from "@/data/registry";
 import { extraByTrack } from "@/data/sittings";
 import {
   catalogSentence,
-  coverage,
+  coverageFor,
   flagship,
   formatDuration,
   lectureOf,
+  modulesFor,
   programBySlug,
   schoolName,
 } from "@/lib/atlas";
@@ -41,7 +42,8 @@ function ProgramPage() {
   }
 
   const track = tracks[program.track];
-  const cov = coverage(program.track, seen);
+  const modules = modulesFor(program);
+  const cov = coverageFor(program, seen);
   const pct = cov.total ? Math.round((cov.watched / cov.total) * 100) : 0;
   const firstId = cov.ids.find((id) => !seen.has(id)) ?? cov.ids[0];
   const feature = flagship(program.track);
@@ -68,6 +70,9 @@ function ProgramPage() {
         {catalogIds.length === 0
           ? "A public sitting is now attached. The headings further down are still the study map. One lecture is not the fellowship, and it is not a board."
           : track?.scope}
+        {program.slug === "emory-nm"
+          ? " This residency also lists public CT, MRI, and PET anatomy, and diagnosis on those studies. They are not Emory conferences."
+          : ""}
       </p>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
         {catalogSentence(program)}
@@ -183,11 +188,11 @@ function ProgramPage() {
 
       <section className="mt-8">
         <h2 className="font-serif text-2xl text-cream">Lectures</h2>
-        {track && track.modules.length === 0 && !extra ? (
+        {modules.length === 0 && !extra ? (
           <p className="mt-3 text-sm text-dim">No video lectures on this track.</p>
         ) : null}
         <div className="mt-3 flex flex-col gap-3">
-          {track?.modules.map((mod, index) => (
+          {modules.map((mod, index) => (
             <details
               key={mod.title}
               open={index === 0}
